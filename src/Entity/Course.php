@@ -37,7 +37,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(
             property: 'isPremium',
             description: 'If course is premium or not',
-            type: 'string'
+            type: 'boolean'
         ),
         new OA\Property(
             property: 'createdAt',
