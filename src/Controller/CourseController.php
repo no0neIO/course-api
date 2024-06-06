@@ -9,8 +9,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Service\CourseServiceInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes as OA;
+use App\Entity\Course;
 
-#[Route('/courses')]
+#[Route('/api/courses')]
 class CourseController extends AbstractController
 {
     private $courseService;
@@ -25,6 +28,20 @@ class CourseController extends AbstractController
     }
 
     #[Route('', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns all Courses',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(
+                    type: Course::class,
+                    groups: ['full']
+                )
+            )
+        )
+    )]
+    #[OA\Tag(name: 'Courses')]
     public function index(): Response
     {
         $courses = $this->courseService->getAllCourses();
@@ -32,6 +49,24 @@ class CourseController extends AbstractController
     }
 
     #[Route('/{id}', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Returns a course',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: new Model(
+                    type: Course::class,
+                    groups: ['full']
+                )
+            )
+        ),
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Course not found',
+    )]
+    #[OA\Tag(name: 'Get a Course')]
     public function show($id): Response
     {
         $course = $this->courseService->getCourse($id);
@@ -86,7 +121,9 @@ class CourseController extends AbstractController
         $constraints = new Assert\Collection([
             'title' => new Assert\NotBlank(),
             'description' => new Assert\Optional(new Assert\Type('string')),
-            'status' => new Assert\Choice(['choices' => ['Published', 'Pending']]),
+            'status' => new Assert\Choice(
+                ['choices' => ['Published', 'Pending']]
+            ),
             'is_premium' => new Assert\Type('boolean'),
         ]);
 

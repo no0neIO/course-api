@@ -5,10 +5,52 @@ namespace App\Entity;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Index(name: "title_idx", columns: ["title"])]
+#[OA\Schema(
+    schema: 'Course',
+    description: 'Course entity',
+    properties: [
+        new OA\Property(
+            property: 'id',
+            description: 'The unique identifier of the course',
+            type: 'integer'
+        ),
+        new OA\Property(
+            property: 'title',
+            description: 'The title of the course',
+            type: 'string'
+        ),
+        new OA\Property(
+            property: 'description',
+            description: 'The description of the course',
+            type: 'string'
+        ),
+        new OA\Property(
+            property: 'status',
+            description: 'The status of the course',
+            type: 'string'
+        ),
+        new OA\Property(
+            property: 'isPremium',
+            description: 'If course is premium or not',
+            type: 'string'
+        ),
+        new OA\Property(
+            property: 'createdAt',
+            description: 'The date course created',
+            type: 'string'
+        ),
+        new OA\Property(
+            property: 'deletedAt',
+            description: 'The date course deleted',
+            type: 'string'
+        )
+    ]
+)]
 class Course
 {
     #[ORM\Id]
