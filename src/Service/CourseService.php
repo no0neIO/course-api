@@ -55,7 +55,9 @@ class CourseService implements CourseServiceInterface
 
     public function deleteCourse(Course $course): void
     {
-        // $this->entityManager->remove($course);
+        // alternatively we can use a doctrine extension
+        // for a soft delete behavior,
+        // such as: https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/softdeleteable.md
         $course->setDeletedAt(new \DateTime());
         $this->entityManager->flush();
     }
